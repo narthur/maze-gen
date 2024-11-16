@@ -54,4 +54,8 @@ Uses Trémaux's algorithm with randomness:
 
 ## Verifying changes
 
-After every code change, run `npm run check:ts` and `npm run build` and then fix any errors that resulted from your change.
+After every code change, run the following commands and then fix any errors that resulted from your change:
+
+- `pnpm check:ts`
+- `pnpm test -- --run`
+- `pnpm build`
