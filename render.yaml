@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: maze-gen
+    runtime: static
+    buildCommand: pnpm install && pnpm build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    domains:
+      - maze.nathanarthur.com
