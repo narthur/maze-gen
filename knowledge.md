@@ -1,6 +1,7 @@
 # Maze Generation Project
 
 ## Project Goals
+
 - Generate mazes using depth-first search
 - Visualize maze generation in real-time
 - Race two solvers using Trémaux's algorithm
@@ -9,6 +10,7 @@
 ## Architecture Approaches
 
 ### Version 1 (/src/main.ts)
+
 - Imperative style with mutable state
 - Direct DOM manipulation
 - Combines generation, solving, and rendering logic
@@ -16,6 +18,7 @@
 - Real-time animation using requestAnimationFrame
 
 ### Version 2 (/src/new.ts)
+
 - Functional style with immutable state
 - State machine pattern
 - Separates concerns:
@@ -28,7 +31,9 @@
 ## Key Algorithms
 
 ### Maze Generation
+
 Uses randomized depth-first search:
+
 1. Start from initial cell
 2. Randomly choose unvisited neighbor
 3. Remove wall between cells
@@ -36,7 +41,9 @@ Uses randomized depth-first search:
 5. Backtrack when no unvisited neighbors
 
 ### Maze Solving
+
 Uses Trémaux's algorithm with randomness:
+
 1. Mark passages when entering/exiting
 2. At junction, prefer unmarked passages
 3. Use random choice for equal options
@@ -44,11 +51,17 @@ Uses Trémaux's algorithm with randomness:
 5. Trail shows last 15 positions with fading opacity
 
 ## URL Parameters
+
 - cellSize: Controls maze resolution (default: 20)
   Example: /?cellSize=30
 
 ## Visual Style
+
 - Background: #1a1a1a
 - Walls: #4a4a4a
 - Solver 1: Red with opacity trail
 - Solver 2: Blue with opacity trail
+
+## Verifying changes
+
+After every code change, run `npm run check:ts` and `npm run build` and then fix any errors that resulted from your change.
