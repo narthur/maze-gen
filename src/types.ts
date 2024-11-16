@@ -1,3 +1,15 @@
+export type State = {
+  grid: Cell[][];
+  current: Position | null;
+  stack: Position[];
+  cellSize: number;
+  cols: number;
+  rows: number;
+  phase: 'generating' | 'solving';
+  solvers: [Solver, Solver];
+  trails: [Trail[], Trail[]];
+};
+
 export type Cell = {
   visited: boolean;
   walls: { top: boolean; right: boolean; bottom: boolean; left: boolean };
