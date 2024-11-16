@@ -54,16 +54,26 @@ function moveRunner(
   }
 }
 
+// Track visited entrances (marks) for each solver
+let marks1: { top: number; right: number; bottom: number; left: number }[][] | null = null;
+let marks2: { top: number; right: number; bottom: number; left: number }[][] | null = null;
+
 export function applySolveStep(prevState: State): State {
-  // Track visited entrances (marks) for each solver
-  const marks1 = Array(prevState.rows).fill(null).map(() =>
-    Array(prevState.cols).fill(null).map(() => ({
-      top: 0, right: 0, bottom: 0, left: 0
-    })));
-  const marks2 = Array(prevState.rows).fill(null).map(() =>
-    Array(prevState.cols).fill(null).map(() => ({
-      top: 0, right: 0, bottom: 0, left: 0
-    })));
+  // Initialize marks if needed
+  if (!marks1 || !marks2) {
+    marks1 = Array(prevState.rows).fill(null).map(() =>
+      Array(prevState.cols).fill(null).map(() => ({
+        top: 0, right: 0, bottom: 0, left: 0
+      })));
+    marks2 = Array(prevState.rows).fill(null).map(() =>
+      Array(prevState.cols).fill(null).map(() => ({
+        top: 0, right: 0, bottom: 0, left: 0
+      })));
+  }
+
+  // Move runners
+  moveRunner(prevState.solvers[0], marks1, prevState);
+  moveRunner(prevState.solvers[1], marks2, prevState);
 
   // Move runners
   moveRunner(prevState.solvers[0], marks1, prevState);
