@@ -323,8 +323,8 @@ function startRace(
     moveRunner(solver1, marks1);
     moveRunner(solver2, marks2);
 
-    // Continue until both solvers have completed their last move
-    if ((solver1.row > 0 || solver1.col > 0) || 
+    // Continue until someone reaches the start (0,0)
+    if ((solver1.row > 0 || solver1.col > 0) && 
         (solver2.row > 0 || solver2.col > 0)) {
       requestAnimationFrame(raceStep);
     }
