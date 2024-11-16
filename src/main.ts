@@ -14,6 +14,7 @@ app.innerHTML = `
 let state = getInitialState();
 
 function step() {
+  console.log("step");
   state = updateState(state);
   renderState(state);
   requestAnimationFrame(step);
