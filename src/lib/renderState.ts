@@ -52,4 +52,30 @@ export function renderState(state: State) {
       state.cellSize
     );
   }
+
+  // Draw trails (last 15 positions with decreasing opacity)
+  const recentTrail1 = [...state.trails[0]].slice(-15).reverse();
+  const recentTrail2 = [...state.trails[1]].slice(-15).reverse();
+
+  recentTrail1.forEach((pos, idx) => {
+    const opacity = 1 - idx / 15;
+    ctx.fillStyle = `rgba(255, 0, 0, ${opacity})`;
+    ctx.fillRect(
+      pos.col * state.cellSize + state.cellSize/4,
+      pos.row * state.cellSize + state.cellSize/4,
+      state.cellSize/2,
+      state.cellSize/2
+    );
+  });
+
+  recentTrail2.forEach((pos, idx) => {
+    const opacity = 1 - idx / 15;
+    ctx.fillStyle = `rgba(0, 0, 255, ${opacity})`;
+    ctx.fillRect(
+      pos.col * state.cellSize + state.cellSize/4,
+      pos.row * state.cellSize + state.cellSize/4,
+      state.cellSize/2,
+      state.cellSize/2
+    );
+  });
 }
