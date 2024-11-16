@@ -17,6 +17,12 @@ function step() {
   console.log("step");
   state = updateState(state);
   renderState(state);
+  
+  // Reset when solved
+  if (state.solved) {
+    state = getInitialState();
+  }
+  
   requestAnimationFrame(step);
 }
 
