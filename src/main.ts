@@ -10,7 +10,6 @@ app.innerHTML = `
   </div>
 `;
 
-// Initialize and start
 let state = getInitialState();
 
 function step() {
@@ -25,5 +24,4 @@ function step() {
   requestAnimationFrame(step);
 }
 
-// Start animation
 step();
