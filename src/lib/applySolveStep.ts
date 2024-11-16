@@ -69,12 +69,17 @@ export function applySolveStep(prevState: State): State {
   moveRunner(prevState.solvers[0], marks1, prevState);
   moveRunner(prevState.solvers[1], marks2, prevState);
 
-  return {
-    ...prevState,
-    solvers: [...prevState.solvers],
-    trails: [
-      [...prevState.trails[0], { ...prevState.solvers[0], time: Date.now() }],
-      [...prevState.trails[1], { ...prevState.solvers[1], time: Date.now() }]
-    ]
-  };
+  // Continue until someone reaches the start (0,0)
+  if ((prevState.solvers[0].row > 0 || prevState.solvers[0].col > 0) && 
+      (prevState.solvers[1].row > 0 || prevState.solvers[1].col > 0)) {
+    return {
+      ...prevState,
+      solvers: [...prevState.solvers],
+      trails: [
+        [...prevState.trails[0], { ...prevState.solvers[0], time: Date.now() }],
+        [...prevState.trails[1], { ...prevState.solvers[1], time: Date.now() }]
+      ]
+    };
+  }
+  return prevState;
 }
