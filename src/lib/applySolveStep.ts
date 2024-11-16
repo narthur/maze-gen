@@ -85,10 +85,10 @@ export function applySolveStep(prevState: State): State {
     ] as [typeof prevState.trails[0], typeof prevState.trails[1]]
   };
 
-  // Continue until someone reaches the start (0,0)
+  // Update state and continue until someone reaches the start (0,0)
   if ((prevState.solvers[0].row > 0 || prevState.solvers[0].col > 0) && 
       (prevState.solvers[1].row > 0 || prevState.solvers[1].col > 0)) {
     return newState;
   }
-  return prevState;
+  return newState;
 }
