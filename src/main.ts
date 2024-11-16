@@ -3,11 +3,6 @@ import "./style.css";
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.innerHTML = `
   <div>
-    <div style="margin-bottom: 10px">
-      <label for="cell-size">Cell Size: </label>
-      <input type="number" id="cell-size" value="20" min="5" max="100">
-    </div>
-    <button id="generate-maze">Generate Maze</button>
     <canvas id="maze-canvas"></canvas>
   </div>
 `;
@@ -16,7 +11,8 @@ const canvas = document.querySelector<HTMLCanvasElement>("#maze-canvas")!;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d")!;
-let cellSize = 20;
+const params = new URLSearchParams(window.location.search);
+let cellSize = Number(params.get('cellSize')) || 20;
 let cols = Math.floor(canvas.width / cellSize);
 let rows = Math.floor(canvas.height / cellSize);
 
@@ -35,37 +31,21 @@ let grid = Array(rows)
 let current: { row: number; col: number } | null = null;
 let stack: { row: number; col: number }[] = [];
 
-document.querySelector("#generate-maze")?.addEventListener("click", (e) => {
-  cellSize = Number(
-    (document.querySelector("#cell-size") as HTMLInputElement).value
-  );
-  // Hide button
-  (e.target as HTMLElement).style.display = "none";
+// Start from top-left
+current = { row: 0, col: 0 };
+stack = [];
+grid[0][0].visited = true;
 
-  // Recalculate grid dimensions
-  cols = Math.floor(canvas.width / cellSize);
-  rows = Math.floor(canvas.height / cellSize);
+// Start animation
+step();
 
-  // Reset grid
-  grid = Array(rows)
-    .fill(null)
-    .map(() =>
-      Array(cols)
-        .fill(null)
-        .map(() => ({
-          visited: false,
-          walls: { top: true, right: true, bottom: true, left: true },
-        }))
-    );
+// Start from top-left
+current = { row: 0, col: 0 };
+stack = [];
+grid[0][0].visited = true;
 
-  // Start from top-left
-  current = { row: 0, col: 0 };
-  stack = [];
-  grid[0][0].visited = true;
-
-  // Start animation
-  step();
-});
+// Start animation
+step();
 
 function step() {
   if (!current) return;
