@@ -26,6 +26,7 @@ export function getInitialState(): State {
       { row: rows - 1, col: cols - 1, color: "rgba(0,0,0,0)" },
       { row: rows - 1, col: cols - 1, color: "rgba(0,0,0,0)" }
     ],
-    trails: [[], []]
+    trails: [[], []],
+    solved: false
   };
 }

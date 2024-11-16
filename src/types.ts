@@ -6,6 +6,7 @@ export type State = {
   cols: number;
   rows: number;
   phase: 'generating' | 'solving';
+  solved: boolean;
   solvers: [Solver, Solver];
   trails: [Trail[], Trail[]];
 };

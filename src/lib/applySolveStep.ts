@@ -25,7 +25,7 @@ function moveRunner(
         newRow >= 0 && newRow < state.rows &&
         newCol >= 0 && newCol < state.cols) {
       // Following Trémaux's rules with randomness for equal choices
-      const markCount = marks[row][col][dir as keyof (typeof marks)[0][0]];
+      const markCount = marks[row]?.[col]?.[dir as keyof (typeof marks)[0][0]] ?? 0;
       if (markCount < 2) { // Only consider paths marked less than twice
         moves.push({ row: newRow, col: newCol, dir });
       }
@@ -37,21 +37,25 @@ function moveRunner(
     // For paths with equal marks, choose randomly
     moves.sort(() => Math.random() - 0.5);
     moves.sort((a, b) => {
-      const aMarks = marks[row][col][a.dir as keyof (typeof marks)[0][0]];
-      const bMarks = marks[row][col][b.dir as keyof (typeof marks)[0][0]];
+      const aMarks = marks[row]?.[col]?.[a.dir as keyof (typeof marks)[0][0]] ?? 0;
+      const bMarks = marks[row]?.[col]?.[b.dir as keyof (typeof marks)[0][0]] ?? 0;
       return aMarks - bMarks;
     });
     const move = moves[0];
 
     // Mark both sides of the passage
-    marks[row][col][move.dir as keyof (typeof marks)[0][0]]++;
-    const oppositeDir = {
-      top: "bottom",
-      right: "left",
-      bottom: "top",
-      left: "right"
-    } as const;
-    marks[move.row][move.col][oppositeDir[move.dir as keyof typeof oppositeDir]]++;
+    if (marks[row]?.[col]) {
+      marks[row][col][move.dir as keyof (typeof marks)[0][0]]++;
+      const oppositeDir = {
+        top: "bottom",
+        right: "left",
+        bottom: "top",
+        left: "right"
+      } as const;
+      if (marks[move.row]?.[move.col]) {
+        marks[move.row][move.col][oppositeDir[move.dir as keyof typeof oppositeDir]]++;
+      }
+    }
 
     runner.row = move.row;
     runner.col = move.col;
@@ -85,10 +89,12 @@ export function applySolveStep(prevState: State): State {
     ] as [typeof prevState.trails[0], typeof prevState.trails[1]]
   };
 
-  // Update state and continue until someone reaches the start (0,0)
-  if ((prevState.solvers[0].row > 0 || prevState.solvers[0].col > 0) && 
-      (prevState.solvers[1].row > 0 || prevState.solvers[1].col > 0)) {
-    return newState;
-  }
-  return newState;
+  // Check if either solver has reached (0,0)
+  const solver1AtGoal = newState.solvers[0].row === 0 && newState.solvers[0].col === 0;
+  const solver2AtGoal = newState.solvers[1].row === 0 && newState.solvers[1].col === 0;
+
+  return {
+    ...newState,
+    solved: solver1AtGoal || solver2AtGoal
+  };
 }
