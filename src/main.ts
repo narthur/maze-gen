@@ -244,14 +244,14 @@ function startRace(
     // Draw current state
     ctx.fillStyle = "#1a1a1a";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    
     // Draw grid
     ctx.strokeStyle = "#4a4a4a";
     grid.forEach((row, i) => {
       row.forEach((cell, j) => {
         const x = j * cellSize;
         const y = i * cellSize;
-
+        
         if (cell.walls.top) {
           ctx.beginPath();
           ctx.moveTo(x, y);
@@ -278,6 +278,14 @@ function startRace(
         }
       });
     });
+
+    // Update trails
+    trail1.push({ row: solver1.row, col: solver1.col, time: currentTime });
+    trail2.push({ row: solver2.row, col: solver2.col, time: currentTime });
+
+    // Move runners
+    moveRunner(solver1, marks1);
+    moveRunner(solver2, marks2);
 
     // Draw trails (last 15 positions with decreasing opacity)
     const recentTrail1 = [...trail1].slice(-15).reverse();
@@ -311,13 +319,13 @@ function startRace(
 
     // Move runners
     moveRunner(solver1, marks1);
+    moveRunner(solver2, marks2);    // Move runners
+    moveRunner(solver1, marks1);
     moveRunner(solver2, marks2);
 
-    // Continue until someone reaches the start (0,0)
-    if (
-      (solver1.row > 0 || solver1.col > 0) &&
-      (solver2.row > 0 || solver2.col > 0)
-    ) {
+    // Continue until both solvers have completed their last move
+    if ((solver1.row > 0 || solver1.col > 0) || 
+        (solver2.row > 0 || solver2.col > 0)) {
       requestAnimationFrame(raceStep);
     }
   }
