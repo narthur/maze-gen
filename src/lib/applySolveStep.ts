@@ -75,11 +75,11 @@ export function applySolveStep(prevState: State): State {
   moveRunner(prevState.solvers[0], marks1, prevState);
   moveRunner(prevState.solvers[1], marks2, prevState);
 
-  // Move runners
-  moveRunner(prevState.solvers[0], marks1, prevState);
-  moveRunner(prevState.solvers[1], marks2, prevState);
-
-  // Continue until someone reaches the start (0,0)
+  // Move runners and capture positions
+  const moved1 = moveRunner(prevState.solvers[0], marks1, prevState);
+  const moved2 = moveRunner(prevState.solvers[1], marks2, prevState);
+  
+  // Only update trails if the runners actually moved
   if ((prevState.solvers[0].row > 0 || prevState.solvers[0].col > 0) && 
       (prevState.solvers[1].row > 0 || prevState.solvers[1].col > 0)) {
     return {
