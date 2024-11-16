@@ -29,11 +29,14 @@ function moveRunner(
   }
 
   if (moves.length > 0) {
-    // Randomly choose among least-marked paths
-    moves.sort(() => Math.random() - 0.5);
-    moves.sort((a, b) =>
-      marks[row][col][a.dir as keyof (typeof marks)[0][0]] -
-      marks[row][col][b.dir as keyof (typeof marks)[0][0]]);
+    // First prefer unmarked paths, then single-marked paths
+    // For paths with equal marks, choose randomly
+    moves.sort(() => Math.random() - 0.5); // Randomize first for equal marks
+    moves.sort((a, b) => {
+      const aMarks = marks[row][col][a.dir as keyof (typeof marks)[0][0]];
+      const bMarks = marks[row][col][b.dir as keyof (typeof marks)[0][0]];
+      return aMarks - bMarks;
+    });
     const move = moves[0];
 
     // Mark both sides of the passage
