@@ -40,6 +40,11 @@ Uses Trémaux's algorithm with randomness:
 4. Backtrack on doubly-marked passages
 5. Trail shows last 15 positions with fading opacity
 
+Known Issues:
+- Solvers can get stuck in certain maze configurations
+- Built-in detection throws error if solver stays in same position for 2 ticks
+- Error includes state dump for debugging stuck conditions
+
 ## URL Parameters
 
 - cellSize: Controls maze resolution (default: 20)

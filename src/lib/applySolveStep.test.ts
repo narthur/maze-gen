@@ -55,4 +55,31 @@ describe('applySolveStep', () => {
     const result = applySolveStep(initialState);
     expect(result.solved).toBe(true);
   });
+
+  it('should detect when a solver gets stuck', () => {
+    const stuckState: State = {
+      grid: [
+        [{ visited: true, walls: { top: true, right: true, bottom: true, left: true } }],
+        [{ visited: true, walls: { top: true, right: true, bottom: true, left: true } }]
+      ],
+      current: null,
+      stack: [],
+      cellSize: 20,
+      cols: 1,
+      rows: 2,
+      phase: 'solving',
+      solvers: [
+        { row: 1, col: 0, color: "rgba(255,0,0,0.5)" },
+        { row: 1, col: 0, color: "rgba(0,0,255,0.5)" }
+      ],
+      trails: [[], []],
+      solved: false
+    };
+
+    // First call should work
+    applySolveStep(stuckState);
+    
+    // Second call with same position should throw
+    expect(() => applySolveStep(stuckState)).toThrow('Solver 1 is stuck at the same position');
+  });
 });
