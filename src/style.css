@@ -44,6 +44,12 @@ h1 {
   bottom: 0;
   left: 0;
   z-index: 0;
+  transition: transform 1s ease-in-out;
+  transform-origin: top left;
+}
+
+#maze-canvas.zoom-to-win {
+  transform: scale(3) translate(0%, 0%);
 }
 
 #generate-maze, label, input {

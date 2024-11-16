@@ -18,9 +18,18 @@ function step() {
   state = updateState(state);
   renderState(state);
   
-  // Reset when solved
+  // Handle win animation
   if (state.solved) {
-    state = getInitialState();
+    const canvas = document.querySelector<HTMLCanvasElement>("#maze-canvas")!;
+    canvas.classList.add('zoom-to-win');
+    
+    // Reset after animation
+    setTimeout(() => {
+      canvas.classList.remove('zoom-to-win');
+      state = getInitialState();
+      requestAnimationFrame(step);
+    }, 1500);
+    return; // Pause simulation while animating
   }
   
   requestAnimationFrame(step);
