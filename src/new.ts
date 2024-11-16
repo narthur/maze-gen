@@ -13,8 +13,17 @@ type State = {
   trails: [Trail[], Trail[]];
 };
 
+const app = document.querySelector<HTMLDivElement>("#app")!;
+app.innerHTML = `
+  <div>
+    <canvas id="maze-canvas"></canvas>
+  </div>
+`;
+
 function getInitialState(): State {
   const canvas = document.querySelector<HTMLCanvasElement>("#maze-canvas")!;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
   const params = new URLSearchParams(window.location.search);
   const cellSize = Number(params.get('cellSize')) || 20;
   const cols = Math.floor(canvas.width / cellSize);
@@ -144,6 +153,17 @@ function renderState(state: State) {
       }
     });
   });
+
+  // Highlight current cell during generation
+  if (state.phase === 'generating' && state.current) {
+    ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
+    ctx.fillRect(
+      state.current.col * state.cellSize,
+      state.current.row * state.cellSize,
+      state.cellSize,
+      state.cellSize
+    );
+  }
 }
 
 // Initialize and start
