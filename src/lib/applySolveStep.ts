@@ -1,8 +1,10 @@
 import type { State } from "../types";
 
-// Track visited entrances (marks) for each solver
+// Track visited entrances (marks) and previous positions for each solver
 let marks1: { top: number; right: number; bottom: number; left: number }[][] | null = null;
 let marks2: { top: number; right: number; bottom: number; left: number }[][] | null = null;
+let prevPos1: { row: number; col: number } | null = null;
+let prevPos2: { row: number; col: number } | null = null;
 
 function moveRunner(
   runner: { row: number; col: number; color: string },
@@ -63,8 +65,20 @@ function moveRunner(
 }
 
 export function applySolveStep(prevState: State): State {
-  // Initialize marks if needed
+  // Check for stuck solvers
+  if (prevPos1 && prevState.solvers[0].row === prevPos1.row && prevState.solvers[0].col === prevPos1.col) {
+    console.error('Solver 1 stuck! Current state:', prevState);
+    throw new Error('Solver 1 is stuck at the same position');
+  }
+  if (prevPos2 && prevState.solvers[1].row === prevPos2.row && prevState.solvers[1].col === prevPos2.col) {
+    console.error('Solver 2 stuck! Current state:', prevState);
+    throw new Error('Solver 2 is stuck at the same position');
+  }
+
+  // Initialize marks and reset previous positions if needed
   if (!marks1 || !marks2) {
+    prevPos1 = null;
+    prevPos2 = null;
     marks1 = Array(prevState.rows).fill(null).map(() =>
       Array(prevState.cols).fill(null).map(() => ({
         top: 0, right: 0, bottom: 0, left: 0
@@ -74,6 +88,10 @@ export function applySolveStep(prevState: State): State {
         top: 0, right: 0, bottom: 0, left: 0
       })));
   }
+
+  // Store current positions before moving
+  prevPos1 = { row: prevState.solvers[0].row, col: prevState.solvers[0].col };
+  prevPos2 = { row: prevState.solvers[1].row, col: prevState.solvers[1].col };
 
   // Move runners
   moveRunner(prevState.solvers[0], marks1, prevState);
