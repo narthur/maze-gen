@@ -1,5 +1,9 @@
 import type { State } from "../types";
 
+// Track visited entrances (marks) for each solver
+let marks1: { top: number; right: number; bottom: number; left: number }[][] | null = null;
+let marks2: { top: number; right: number; bottom: number; left: number }[][] | null = null;
+
 function moveRunner(
   runner: { row: number; col: number; color: string },
   marks: { top: number; right: number; bottom: number; left: number }[][],
@@ -31,7 +35,7 @@ function moveRunner(
   if (moves.length > 0) {
     // First prefer unmarked paths, then single-marked paths
     // For paths with equal marks, choose randomly
-    moves.sort(() => Math.random() - 0.5); // Randomize first for equal marks
+    moves.sort(() => Math.random() - 0.5);
     moves.sort((a, b) => {
       const aMarks = marks[row][col][a.dir as keyof (typeof marks)[0][0]];
       const bMarks = marks[row][col][b.dir as keyof (typeof marks)[0][0]];
@@ -54,10 +58,6 @@ function moveRunner(
   }
 }
 
-// Track visited entrances (marks) for each solver
-let marks1: { top: number; right: number; bottom: number; left: number }[][] | null = null;
-let marks2: { top: number; right: number; bottom: number; left: number }[][] | null = null;
-
 export function applySolveStep(prevState: State): State {
   // Initialize marks if needed
   if (!marks1 || !marks2) {
@@ -75,21 +75,20 @@ export function applySolveStep(prevState: State): State {
   moveRunner(prevState.solvers[0], marks1, prevState);
   moveRunner(prevState.solvers[1], marks2, prevState);
 
-  // Move runners and capture positions
-  const moved1 = moveRunner(prevState.solvers[0], marks1, prevState);
-  const moved2 = moveRunner(prevState.solvers[1], marks2, prevState);
-  
-  // Only update trails if the runners actually moved
+  const currentTime = Date.now();
+  const newState = {
+    ...prevState,
+    solvers: [prevState.solvers[0], prevState.solvers[1]] as [typeof prevState.solvers[0], typeof prevState.solvers[1]],
+    trails: [
+      [...prevState.trails[0], { ...prevState.solvers[0], time: currentTime }],
+      [...prevState.trails[1], { ...prevState.solvers[1], time: currentTime }]
+    ] as [typeof prevState.trails[0], typeof prevState.trails[1]]
+  };
+
+  // Continue until someone reaches the start (0,0)
   if ((prevState.solvers[0].row > 0 || prevState.solvers[0].col > 0) && 
       (prevState.solvers[1].row > 0 || prevState.solvers[1].col > 0)) {
-    return {
-      ...prevState,
-      solvers: [...prevState.solvers],
-      trails: [
-        [...prevState.trails[0], { ...prevState.solvers[0], time: Date.now() }],
-        [...prevState.trails[1], { ...prevState.solvers[1], time: Date.now() }]
-      ]
-    };
+    return newState;
   }
   return prevState;
 }
