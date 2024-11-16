@@ -3,18 +3,18 @@ import type { State, Cell } from "../types";
 export function renderState(state: State) {
   const canvas = document.querySelector<HTMLCanvasElement>("#maze-canvas")!;
   const ctx = canvas.getContext("2d")!;
-  
+
   // Clear canvas
   ctx.fillStyle = "#1a1a1a";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // Draw grid
   ctx.strokeStyle = "#4a4a4a";
   state.grid.forEach((row: Cell[], i: number) => {
     row.forEach((cell: Cell, j: number) => {
       const x = j * state.cellSize;
       const y = i * state.cellSize;
-      
+
       if (cell.walls.top) {
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -43,7 +43,7 @@ export function renderState(state: State) {
   });
 
   // Highlight current cell during generation
-  if (state.phase === 'generating' && state.current) {
+  if (state.phase === "generating" && state.current) {
     ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
     ctx.fillRect(
       state.current.col * state.cellSize,
@@ -61,10 +61,10 @@ export function renderState(state: State) {
     const opacity = 1 - idx / 15;
     ctx.fillStyle = `rgba(255, 0, 0, ${opacity})`;
     ctx.fillRect(
-      pos.col * state.cellSize + state.cellSize/4,
-      pos.row * state.cellSize + state.cellSize/4,
-      state.cellSize/2,
-      state.cellSize/2
+      pos.col * state.cellSize + state.cellSize / 4,
+      pos.row * state.cellSize + state.cellSize / 4,
+      state.cellSize / 2,
+      state.cellSize / 2
     );
   });
 
@@ -72,10 +72,10 @@ export function renderState(state: State) {
     const opacity = 1 - idx / 15;
     ctx.fillStyle = `rgba(0, 0, 255, ${opacity})`;
     ctx.fillRect(
-      pos.col * state.cellSize + state.cellSize/4,
-      pos.row * state.cellSize + state.cellSize/4,
-      state.cellSize/2,
-      state.cellSize/2
+      pos.col * state.cellSize + state.cellSize / 4,
+      pos.row * state.cellSize + state.cellSize / 4,
+      state.cellSize / 2,
+      state.cellSize / 2
     );
   });
 }

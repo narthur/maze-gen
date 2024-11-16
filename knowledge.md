@@ -40,6 +40,11 @@ Uses Trémaux's algorithm with randomness:
 4. Backtrack on doubly-marked passages
 5. Trail shows last 15 positions with fading opacity
 
+Solver Mechanics:
+- Solvers start at bottom-right corner
+- Goal is at top-left (0,0)
+- First solver to reach goal wins
+
 Known Issues:
 - Solvers can get stuck in certain maze configurations
   - Occurs when solver has no valid moves according to Trémaux's rules
