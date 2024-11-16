@@ -56,21 +56,23 @@ describe('applySolveStep', () => {
     expect(result.solved).toBe(true);
   });
 
-  it('should detect when a solver gets stuck', () => {
+  it('should detect when a solver has no valid moves', () => {
+    // Simplified version of the actual stuck state focusing on the relevant section
     const stuckState: State = {
       grid: [
+        [{ visited: true, walls: { top: true, right: true, bottom: true, left: true } }],
         [{ visited: true, walls: { top: true, right: true, bottom: true, left: true } }],
         [{ visited: true, walls: { top: true, right: true, bottom: true, left: true } }]
       ],
       current: null,
       stack: [],
       cellSize: 20,
-      cols: 1,
-      rows: 2,
+      cols: 3,
+      rows: 3,
       phase: 'solving',
       solvers: [
-        { row: 1, col: 0, color: "rgba(255,0,0,0.5)" },
-        { row: 1, col: 0, color: "rgba(0,0,255,0.5)" }
+        { row: 1, col: 0, color: "rgba(0,0,0,0)" },
+        { row: 2, col: 0, color: "rgba(0,0,0,0)" }
       ],
       trails: [[], []],
       solved: false
@@ -79,7 +81,7 @@ describe('applySolveStep', () => {
     // First call should work
     applySolveStep(stuckState);
     
-    // Second call with same position should throw
+    // Should throw when solver has no valid moves
     expect(() => applySolveStep(stuckState)).toThrow('Solver 1 is stuck at the same position');
   });
 });

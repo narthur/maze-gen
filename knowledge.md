@@ -42,8 +42,14 @@ Uses Trémaux's algorithm with randomness:
 
 Known Issues:
 - Solvers can get stuck in certain maze configurations
-- Built-in detection throws error if solver stays in same position for 2 ticks
-- Error includes state dump for debugging stuck conditions
+  - Occurs when solver has no valid moves according to Trémaux's rules
+  - Need to analyze state dumps to identify problematic maze patterns
+  - Current stuck detection is too aggressive
+    - Throws error if solver stays in same position for 2 ticks
+    - Can produce false positives when valid moves exist
+    - Being in same position twice != being stuck
+    - TODO: Improve stuck detection to check for available moves
+  - Error includes state dump for debugging stuck conditions
 
 ## URL Parameters
 
