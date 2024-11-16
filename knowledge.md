@@ -7,17 +7,7 @@
 - Race two solvers using Trémaux's algorithm
 - Support configurable maze resolution via URL params
 
-## Architecture Approaches
-
-### Version 1 (/src/main.ts)
-
-- Imperative style with mutable state
-- Direct DOM manipulation
-- Combines generation, solving, and rendering logic
-- State managed through global variables
-- Real-time animation using requestAnimationFrame
-
-### Version 2 (/src/new.ts)
+## Architecture Approach
 
 - Functional style with immutable state
 - State machine pattern
