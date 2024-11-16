@@ -1,6 +1,6 @@
 export type Cell = {
   visited: boolean;
-  walls: { top: true; right: true; bottom: true; left: true };
+  walls: { top: boolean; right: boolean; bottom: boolean; left: boolean };
 };
 
 export type Position = {

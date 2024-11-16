@@ -1,5 +1,5 @@
 import "./style.css";
-import { Cell, Position, Solver, Trail } from "./types";
+import type { Cell, Position, Solver, Trail } from "./types";
 
 type State = {
   grid: Cell[][];
@@ -112,10 +112,41 @@ function renderState(state: State) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   // Draw grid
-  // ... rest of rendering logic
+  ctx.strokeStyle = "#4a4a4a";
+  state.grid.forEach((row, i) => {
+    row.forEach((cell, j) => {
+      const x = j * state.cellSize;
+      const y = i * state.cellSize;
+      
+      if (cell.walls.top) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + state.cellSize, y);
+        ctx.stroke();
+      }
+      if (cell.walls.right) {
+        ctx.beginPath();
+        ctx.moveTo(x + state.cellSize, y);
+        ctx.lineTo(x + state.cellSize, y + state.cellSize);
+        ctx.stroke();
+      }
+      if (cell.walls.bottom) {
+        ctx.beginPath();
+        ctx.moveTo(x, y + state.cellSize);
+        ctx.lineTo(x + state.cellSize, y + state.cellSize);
+        ctx.stroke();
+      }
+      if (cell.walls.left) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + state.cellSize);
+        ctx.stroke();
+      }
+    });
+  });
 }
 
-// Initialize
+// Initialize and start
 let state = getInitialState();
 
 function step() {
@@ -123,3 +154,6 @@ function step() {
   renderState(state);
   requestAnimationFrame(step);
 }
+
+// Start animation
+step();
